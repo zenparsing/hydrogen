@@ -1,0 +1,31 @@
+{
+  "name": "light-element",
+  "version": "0.1.0",
+  "description": "Straylight Custom Elements",
+  "type": "module",
+  "main": "./light-element.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenparsing/light-element.git"
+  },
+  "keywords": [
+    "template tag",
+    "html",
+    "custom elements"
+  ],
+  "homepage": "https://github.com/zenparsing/light-element",
+  "dependencies": {
+    "straylight": "^0.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.15.0",
+    "rollup": "^4.27.3",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "scripts": {
+    "test": "eslint *.js",
+    "build": "rollup -c",
+    "presubmitOnly": "npm test && npm run build"
+  }
+}
