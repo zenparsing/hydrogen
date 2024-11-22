@@ -1,5 +1,5 @@
 {
-  "name": "light-element",
+  "name": "lightwave",
   "version": "0.1.0",
   "description": "Straylight Custom Elements",
   "type": "module",
@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "eslint *.js",
-    "build": "rollup -c",
+    "build": "git clean -qdfX ./dist && rollup -c",
     "presubmitOnly": "npm test && npm run build"
   }
 }

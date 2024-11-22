@@ -1,9 +1,9 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
-  input: 'light-element.js',
+  input: 'lightwave.js',
   output: {
-    file: 'dist/light-element.js',
+    file: 'dist/lightwave.js',
     format: 'es',
   },
   plugins: [nodeResolve()],
