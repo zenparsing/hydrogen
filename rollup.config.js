@@ -1,9 +1,9 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
-  input: 'lightwave.js',
+  input: 'hydrogen.js',
   output: {
-    file: 'dist/lightwave.js',
+    file: 'dist/hydrogen.js',
     format: 'es',
   },
   plugins: [nodeResolve()],

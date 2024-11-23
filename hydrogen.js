@@ -93,7 +93,7 @@ export function useEffect(deps, init) {
   });
 }
 
-export class LightElement extends HTMLElement {
+export class Element extends HTMLElement {
   constructor() {
     super();
     this[$facets] = [];
