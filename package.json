@@ -1,9 +1,10 @@
 {
-  "name": "hydrogen",
+  "name": "@zenparsing/hydrogen",
   "version": "0.1.0",
   "description": "The lightest element",
   "type": "module",
   "main": "./hydrogen.js",
+  "types": "./hydrogen.d.ts",
   "license": "MIT",
   "repository": {
     "type": "git",

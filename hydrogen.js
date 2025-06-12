@@ -4,6 +4,7 @@ let $facets = Symbol('facets');
 let $render = Symbol('applyTemplate');
 let $rendering = Symbol('rendering');
 let $renderQueued = Symbol('renderQueued');
+let $nullRender = Symbol('nullRender')
 
 let renderStack = [];
 
@@ -23,12 +24,20 @@ class RenderActivation {
   }
 }
 
-export function getRenderActivation() {
+function getRenderActivation() {
   return renderStack.at(-1);
 }
 
+export function useElement() {
+  return getRenderActivation().element;
+}
+
+export function useFacet(init) {
+  return getRenderActivation().useFacet(init);
+}
+
 export function useState(initialState) {
-  let facet = getRenderActivation().useFacet((facet, element) => {
+  let facet = useFacet((facet, element) => {
     if (facet && facet.kind === 'state') {
       return facet;
     }
@@ -41,9 +50,13 @@ export function useState(initialState) {
         ? initialState()
         : initialState,
       setValue: (value) => {
-        if (facet.value !== value) {
+        if (!disposed && facet.value !== value) {
           facet.value = value;
-          if (!disposed) element[$render]();
+          queueMicrotask(() => {
+            if (!disposed) {
+              element[$render]();
+            }
+          });
         }
       },
       dispose: () => { disposed = true; },
@@ -55,14 +68,14 @@ export function useState(initialState) {
   return [facet.value, facet.setValue];
 }
 
-export function useParent(constructor) {
-  let elem = getRenderActivation().element;
+export function useClosest(constructor) {
+  let elem = useElement();
   for (elem = elem.parentNode; elem; elem = elem.parentNode) {
     if (elem instanceof constructor) {
       return elem;
     }
   }
-  throw new Error('Unable to find context');
+  throw new Error('Unable to find matching ancestor');
 }
 
 function depsEqual(a, b) {
@@ -70,7 +83,7 @@ function depsEqual(a, b) {
 }
 
 export function useEffect(deps, init) {
-  getRenderActivation().useFacet((facet) => {
+  useFacet((facet) => {
     if (facet && facet.kind === 'effect') {
       if (depsEqual(facet.deps, deps)) {
         return facet;
@@ -91,6 +104,25 @@ export function useEffect(deps, init) {
 
     return facet;
   });
+}
+
+export function useMemo(deps, init) {
+  useFacet((facet) => {
+    if (facet && facet.kind === 'memo') {
+      if (depsEqual(facet.deps, deps)) {
+        return facet;
+      }
+    }
+
+    return {
+      kind: 'memo',
+      deps,
+      value: init(),
+      dispose: () => {},
+    };
+  });
+
+  return facet.value;
 }
 
 export class Element extends HTMLElement {
@@ -126,20 +158,20 @@ export class Element extends HTMLElement {
     this[$rendering] = true;
     this[$renderQueued] = false;
     renderStack.push(new RenderActivation(this));
-    let templateResult = null;
+    let renderResult = null;
     try {
-      templateResult = this.render();
+      renderResult = this.render();
     } finally {
       this[$rendering] = false;
       renderStack.pop();
     }
-    if (templateResult) {
-      applyTemplate(this.shadowRoot || this, templateResult);
+    if (renderResult !== $nullRender) {
+      applyTemplate(this.shadowRoot ?? this, renderResult)
     }
   }
 
   render() {
-    return null;
+    return $nullRender;
   }
 }
 
