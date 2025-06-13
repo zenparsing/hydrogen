@@ -4,7 +4,7 @@ let $facets = Symbol('facets');
 let $render = Symbol('applyTemplate');
 let $rendering = Symbol('rendering');
 let $renderQueued = Symbol('renderQueued');
-let $nullRender = Symbol('nullRender')
+let $nullRender = Symbol('nullRender');
 
 let renderStack = [];
 
@@ -166,7 +166,7 @@ export class Element extends HTMLElement {
       renderStack.pop();
     }
     if (renderResult !== $nullRender) {
-      applyTemplate(this.shadowRoot ?? this, renderResult)
+      applyTemplate(this.shadowRoot ?? this, renderResult);
     }
   }
 
