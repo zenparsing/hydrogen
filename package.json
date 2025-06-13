@@ -1,6 +1,6 @@
 {
   "name": "@zenparsing/hydrogen",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "The lightest element",
   "type": "module",
   "main": "./hydrogen.js",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zenparsing/hydrogen.git"
+    "url": "git+https://github.com/zenparsing/hydrogen.git"
   },
   "keywords": [
     "template tag",
