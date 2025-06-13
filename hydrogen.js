@@ -99,7 +99,7 @@ export function useEffect(deps, init) {
     };
 
     queueMicrotask(() => {
-      if (!cancel) facet.dispose = init();
+      if (!cancel) facet.dispose = init() ?? (() => {});
     });
 
     return facet;
@@ -107,7 +107,7 @@ export function useEffect(deps, init) {
 }
 
 export function useMemo(deps, init) {
-  useFacet((facet) => {
+  let facet = useFacet((facet) => {
     if (facet && facet.kind === 'memo') {
       if (depsEqual(facet.deps, deps)) {
         return facet;
